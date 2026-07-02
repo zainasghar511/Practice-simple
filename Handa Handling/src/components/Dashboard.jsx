@@ -1,6 +1,17 @@
 import React, { useState } from 'react'
+import { IoIosSearch } from "react-icons/io";
+import { FaBeer } from 'react-icons/fa';
 const Dashboard = ({project}) => {
     const [first, setfirst] = useState("All")
+    const[filter , setFilter] = useState("")
+    const [Show, setShow] = useState(false)
+
+    //Filter The Data 
+    const filterproject = project.filter((item)=>{
+return(first==="All"||item.status===first) &&
+item.projectTitle.toLowerCase().includes(filter.toLowerCase())
+    })
+    
     
   return (
     
@@ -10,7 +21,18 @@ const Dashboard = ({project}) => {
 <h1 className='text-white font-bold text-3xl p-10 '>Remote DevStudio</h1>
 
         </div>
-        <div className='flex justify-between '>
+        <div className='flex mb-5 text-black justify-center'>
+          <span className='flex justify-between bg-white rounded hover:border-2 border-transparent 
+           focus:border-blue-500 w-120 py-1 px-3' > 
+             <input type="text" placeholder='Search here' 
+          className='   bg-white  outline-none border-transparent placeholder:text-gray-900' onChange={((e)=>{
+             setFilter(e.target.value)
+           })} />
+          <IoIosSearch className='text-black flex justify-center items-center text-center mt-0.5 text-xl' />
+        </span>
+        </div>
+       
+        <div className='flex  '>
             
           <button onClick={()=>{
             setfirst("All")
@@ -29,10 +51,13 @@ const Dashboard = ({project}) => {
         
         </div>
         <div className=' grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ml-6 mr-6 cursor-pointer gap-6 '>
-            {project.filter((item)=>{
-if(first==="All") return true;
-return item.status === first
-            }).map((item)=>{
+           {filterproject.length === 0 ? (
+  <div className="col-span-full text-center py-10 text-gray-400">
+    <p className="text-xl font-semibold">No Projects Found</p>
+    <p className="text-sm">Try adjusting your search or filters.</p>
+  </div>
+):
+       filterproject.map((item)=>{
                 return(
                 <div className="bg-slate-800   rounded-xl border hover:scale-105
                  border-slate-700 hover:border-blue-500 transition-all" key={item.id}>
@@ -56,12 +81,14 @@ return item.status === first
                         <br />{item.clientName}</p>
                         </div>
                     <hr className='mt-5' />
-                    <div className='flex justify-between mt-5'>
+                    <div className='flex justify-between mt-5 font-bold'>
                     <p>Perhour
                         <br />
-                        {item.hourlyRate}$</p>
-                    <span className=''>Total Hour
-                        <br  />{item.totalHoursLogged}$</span>
+                     <p className='ml-4 mt-2'>   {item.hourlyRate}$</p> </p>
+                    <span className='font-bold '>Total Hours
+                           <br  />  <p className='ml-8 mt-2'>  {item.totalHoursLogged}
+                            </p>
+                           </span>
                         </div>
    </div>
                 </div>
