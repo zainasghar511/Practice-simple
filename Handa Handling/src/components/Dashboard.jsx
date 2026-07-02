@@ -4,7 +4,7 @@ import { FaBeer } from 'react-icons/fa';
 const Dashboard = ({project}) => {
     const [first, setfirst] = useState("All")
     const[filter , setFilter] = useState("")
-    const [Show, setShow] = useState(false)
+    const [show, setShow] = useState(null)
 
     //Filter The Data 
     const filterproject = project.filter((item)=>{
@@ -57,10 +57,14 @@ item.projectTitle.toLowerCase().includes(filter.toLowerCase())
     <p className="text-sm">Try adjusting your search or filters.</p>
   </div>
 ):
+//Map Function
        filterproject.map((item)=>{
                 return(
                 <div className="bg-slate-800   rounded-xl border hover:scale-105
-                 border-slate-700 hover:border-blue-500 transition-all" key={item.id}>
+                 border-slate-700 hover:border-blue-500 transition-all" key={item.id}
+                 onClick={()=>{
+                    setShow(show===item.id? null:item.id)
+                 }}>
                     <div className='flex justify-between mt-4 '>
                     
                   
@@ -91,13 +95,22 @@ item.projectTitle.toLowerCase().includes(filter.toLowerCase())
                            </span>
                         </div>
    </div>
+ {
+    show===item.id &&(
+        <div className='flex justify-between  p-2 border-2 rounded-xl border-gray-300'>
+        <h1>Total earning</h1>
+        <p> {item.hourlyRate*item.totalHoursLogged}$</p>
+        </div>
+    )
+ }
                 </div>
                 )
             })}
         </div>
 
-
+ 
     </div>
+   
   )
 }
 
